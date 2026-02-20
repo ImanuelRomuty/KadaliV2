@@ -1,5 +1,7 @@
 package com.example.kadaliv2
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,10 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         val bottomNav = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+
+        // Remove default Material3 active indicator and ripple
+        bottomNav.isItemActiveIndicatorEnabled = false
+        bottomNav.itemRippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
         
         setSupportActionBar(toolbar)
 

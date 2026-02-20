@@ -20,6 +20,9 @@
         <!-- Status Bar -->
         <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="android:windowLightStatusBar">false</item>
+
+        <item name="colorControlHighlight">@android:color/transparent</item>
+
     </style>
 
     <style name="ShapeAppearance.KadaliV2.Medium" parent="ShapeAppearance.Material3.MediumComponent">
