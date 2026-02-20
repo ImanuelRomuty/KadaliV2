@@ -20,24 +20,10 @@ class GenerateReportUseCase(
 
         val totalEnergy = devices.sumOf { calculateEnergyUseCase.calculateDailyEnergy(it) }
         val totalDailyCost = calculateEnergyUseCase.calculateDailyCost(totalEnergy, tariffPrice)
-        val totalMonthlyCost = calculateEnergyUseCase.calculateMonthlyCost(totalDailyCost)
-
-        val deviceItems = devices.map { device ->
-            val dailyEnergy = calculateEnergyUseCase.calculateDailyEnergy(device)
-            val dailyCost = calculateEnergyUseCase.calculateDailyCost(dailyEnergy, tariffPrice)
-            val monthlyCost = calculateEnergyUseCase.calculateMonthlyCost(dailyCost)
-            val roomName = rooms.find { it.id == device.roomId }?.name ?: "Unknown"
-
-            DeviceReportItem(
-                deviceName = device.name,
-                roomName = roomName,
-                power = device.powerWatt,
-                hours = device.usageHoursPerDay,
-                quantity = device.quantity,
-                totalEnergy = dailyEnergy,
-                cost = monthlyCost // Using monthly cost for report consistency as requested? Or Daily? spec says "Estimated Cost Contribution". Let's use Monthly to match summary.
-            )
-        }
+        val weeklyCost = calculateEnergyUseCase.calculateWeeklyCost(totalDailyCost)
+        val monthlyCost = calculateEnergyUseCase.calculateMonthlyCost(totalDailyCost)
+        val yearlyCost = calculateEnergyUseCase.calculateYearlyCost(totalDailyCost)
+        val avgDailyCost = totalDailyCost // Simpler representation for "Average Daily Cost" section
 
         val roomItems = rooms.map { room ->
             val roomDevices = devices.filter { it.roomId == room.id }
@@ -45,26 +31,55 @@ class GenerateReportUseCase(
             val roomDailyCost = calculateEnergyUseCase.calculateDailyCost(roomEnergy, tariffPrice)
             val roomMonthlyCost = calculateEnergyUseCase.calculateMonthlyCost(roomDailyCost)
             
+            val deviceItems = roomDevices.map { device ->
+                val dailyEnergy = calculateEnergyUseCase.calculateDailyEnergy(device)
+                val dailyCost = calculateEnergyUseCase.calculateDailyCost(dailyEnergy, tariffPrice)
+                val monthlyEnergy = dailyEnergy * 30
+                val yearlyEnergy = dailyEnergy * 365
+                val connectedLoad = device.powerWatt * device.quantity
+
+                DeviceReportItem(
+                    deviceName = device.name,
+                    power = device.powerWatt,
+                    quantity = device.quantity,
+                    hours = device.usageHoursPerDay,
+                    dailyEnergy = dailyEnergy,
+                    dailyCost = dailyCost,
+                    monthlyEnergy = monthlyEnergy,
+                    yearlyEnergy = yearlyEnergy,
+                    connectedLoad = connectedLoad
+                )
+            }
+
             val percentage = if (totalEnergy > 0) (roomEnergy / totalEnergy) * 100 else 0.0
 
             RoomReportItem(
                 roomName = room.name,
+                roomDescription = room.description ?: "",
+                deviceCount = roomDevices.size,
                 energy = roomEnergy,
                 cost = roomMonthlyCost,
-                percentage = percentage
+                percentage = percentage,
+                devices = deviceItems
             )
         }
 
-        val mostConsumingRoom = roomItems.maxByOrNull { it.energy }?.roomName ?: "N/A"
+        val mostConsumingRoom: String = roomItems.maxByOrNull { it.energy }?.roomName ?: "N/A"
 
         return ReportData(
             generatedDate = System.currentTimeMillis(),
+            officeName = "Kadali Analysis Center",
+            totalRooms = rooms.size,
+            totalDevices = devices.size,
             totalEnergy = totalEnergy,
-            totalCostMonthly = totalMonthlyCost,
+            totalDailyCost = totalDailyCost,
+            totalCostMonthly = monthlyCost,
+            weeklyCost = weeklyCost,
+            yearlyCost = yearlyCost,
+            avgDailyCost = avgDailyCost,
             tariffStart = tariffPrice,
             mostConsumingRoom = mostConsumingRoom,
-            roomBreakdown = roomItems,
-            deviceBreakdown = deviceItems
+            roomBreakdown = roomItems
         )
     }
 }

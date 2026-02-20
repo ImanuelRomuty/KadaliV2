@@ -11,7 +11,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOnPrimary"
+        android:background="@color/surface"
         app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -19,14 +19,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="?attr/colorOnSurface"
+            app:titleTextColor="@color/primary"
             app:title="KadaliV2"
             style="@style/Widget.Material3.Toolbar.Surface" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?attr/colorOutline"
+            android:background="@color/outline"
             android:alpha="0.2"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        style="@style/Widget.KadaliV2.BottomNavigationView"
+        style="@style/Widget.Kadali.BottomNavigation"
         app:itemIconSize="24dp"
         app:labelVisibilityMode="labeled" />
 

@@ -3,23 +3,22 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Branding Colors (Dark Theme) -->
-    <color name="colorPrimary">#FFC107</color> <!-- Amber/Yellow -->
-    <color name="colorPrimaryVariant">#FF6F00</color> <!-- Darker Amber -->
-    <color name="colorSecondary">#FFD54F</color> <!-- Light Amber for accents -->
-    <color name="colorOnPrimary">#000000</color> <!-- Black text on Yellow -->
-    <color name="colorOnSecondary">#000000</color>
+    <!-- Brand Palette: Kadali Dark Electric -->
+    <color name="primary">#FFC107</color> <!-- Amber Accent -->
+    <color name="on_primary">#000000</color> <!-- Black on Amber -->
     
-    <color name="colorBackground">#121212</color> <!-- Deep Dark Background -->
-    <color name="colorSurface">#1E1E1E</color> <!-- Slightly lighter surface -->
-    <color name="colorSurfaceAlt">#2C2C2C</color> <!-- Alternative surface (for cards/containers) -->
+    <color name="background">#121212</color> <!-- App Background -->
+    <color name="surface">#1E1E1E</color> <!-- Top Bar, Bottom Bar, App Bar -->
+    <color name="surface_variant">#2C2C2C</color> <!-- Cards, Nested Containers -->
     
-    <color name="colorOnBackground">#E4E4E4</color> <!-- High contrast text -->
-    <color name="colorOnSurface">#E4E4E4</color>
-    <color name="colorOnSurfaceVariant">#B0B0B0</color> <!-- Secondary text -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
     
-    <color name="colorOutline">#424242</color> <!-- Soft divider -->
-    <color name="colorMuted">#808080</color> <!-- Muted text/icons -->
-    <color name="colorError">#CF6679</color>
-    <color name="colorOnError">#000000</color>
+    <color name="outline">#333333</color> <!-- Divider / Border -->
+    <color name="error">#CF6679</color>
+    <color name="on_error">#000000</color>
+    
+    <!-- Navigation Tints -->
+    <color name="nav_selected">#FFC107</color>
+    <color name="nav_unselected">#888888</color>
 </resources>
