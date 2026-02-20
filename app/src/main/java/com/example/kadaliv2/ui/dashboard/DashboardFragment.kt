@@ -155,60 +155,60 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         currencyFormat.maximumFractionDigits = 0
         
         binding.tvDailyCost.text = currencyFormat.format(state.dailyCost)
-        binding.tvWeeklyCost.text = currencyFormat.format(state.weeklyCost)
         binding.tvMonthlyCost.text = currencyFormat.format(state.monthlyCost)
-        binding.tvYearlyCost.text = currencyFormat.format(state.yearlyCost)
         
         // Prepare Bar Data
-        // Map room names to indices
-        val roomList = state.roomConsumption.keys.toList()
+        val roomConsumption = state.roomConsumption.filter { it.value > 0.0 }
+        val roomList = roomConsumption.keys.toList()
         val entries = roomList.mapIndexed { index, roomName ->
-            val energy = state.roomConsumption[roomName] ?: 0.0
-            // Using Energy for visualization as proxy for Cost (since Tariff is constant)
+            val energy = roomConsumption[roomName] ?: 0.0
             com.github.mikephil.charting.data.BarEntry(index.toFloat(), energy.toFloat())
-        }.filter { it.y > 0f }
+        }
 
         if (entries.isNotEmpty()) {
-            val dataSet = com.github.mikephil.charting.data.BarDataSet(entries, "Estimated Monthly Cost")
+            val dataSet = com.github.mikephil.charting.data.BarDataSet(entries, "Energy Consumption (kWh)")
             
-            // Get Colors from Theme/Resources
-            val colorPrimary = requireContext().getColor(R.color.colorPrimary)
-            val colorOnSurface = requireContext().getColor(R.color.colorOnSurface)
+            // Get Colors from Theme
+            val colorPrimary = requireContext().getColor(R.color.primary)
+            val colorTextSecondary = requireContext().getColor(R.color.text_secondary)
+            val colorTextPrimary = requireContext().getColor(R.color.text_primary)
             
-            dataSet.colors = listOf(colorPrimary)
-            dataSet.valueTextColor = colorOnSurface
+            dataSet.color = colorPrimary
+            dataSet.valueTextColor = colorTextPrimary
             dataSet.valueTextSize = 10f
             
             val data = com.github.mikephil.charting.data.BarData(dataSet)
-            data.barWidth = 0.9f
+            data.barWidth = 0.6f
             
-            binding.barChart.data = data
-            binding.barChart.xAxis.textColor = colorOnSurface
-            binding.barChart.axisLeft.textColor = colorOnSurface
-            binding.barChart.legend.textColor = colorOnSurface
-            
-            // Clean up chart borders and grid for modern look
-            binding.barChart.setDrawGridBackground(false)
-            binding.barChart.setDrawBorders(false)
-            binding.barChart.xAxis.setDrawAxisLine(false)
-            binding.barChart.xAxis.setDrawGridLines(false)
-            binding.barChart.axisLeft.setDrawAxisLine(false)
-            binding.barChart.axisLeft.setDrawGridLines(true)
-            binding.barChart.axisLeft.gridColor = requireContext().getColor(R.color.colorOutline).let { color ->
-                android.graphics.Color.argb(50, android.graphics.Color.red(color), android.graphics.Color.green(color), android.graphics.Color.blue(color))
-            }
-            
-            binding.barChart.xAxis.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    val index = value.toInt()
-                    return if (index >= 0 && index < roomList.size) roomList[index] else ""
+            binding.barChart.apply {
+                this.data = data
+                xAxis.textColor = colorTextSecondary
+                axisLeft.textColor = colorTextSecondary
+                legend.textColor = colorTextSecondary
+                
+                // Styling
+                setDrawGridBackground(false)
+                setDrawBorders(false)
+                xAxis.setDrawAxisLine(true)
+                xAxis.axisLineColor = requireContext().getColor(R.color.outline)
+                xAxis.setDrawGridLines(false)
+                axisLeft.setDrawAxisLine(false)
+                axisLeft.setDrawGridLines(true)
+                axisLeft.gridColor = requireContext().getColor(R.color.outline).let { color ->
+                    android.graphics.Color.argb(50, android.graphics.Color.red(color), android.graphics.Color.green(color), android.graphics.Color.blue(color))
                 }
+                
+                xAxis.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        val index = value.toInt()
+                        return if (index >= 0 && index < roomList.size) roomList[index] else ""
+                    }
+                }
+                invalidate()
             }
-            
-            binding.barChart.invalidate()
         } else {
             binding.barChart.clear()
-            binding.barChart.setNoDataTextColor(requireContext().getColor(R.color.colorOnSurface))
+            binding.barChart.setNoDataTextColor(requireContext().getColor(R.color.text_secondary))
         }
     }
 

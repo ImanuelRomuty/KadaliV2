@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/tv_simulation_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Simulation"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textStyle="bold"
+        android:text="Energy Simulation"
+        android:textAppearance="@style/TextAppearance.Kadali.Headline"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     
@@ -21,19 +21,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Calculate estimated cost for temporary devices"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:text="Simulate temporary equipment impact"
+        android:textColor="@color/text_secondary"
+        android:textAppearance="@style/TextAppearance.Kadali.Body"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_simulation_title" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_power"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:hint="Power (Watt)"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/primary"
+        app:hintTextColor="@color/primary"
         app:layout_constraintEnd_toStartOf="@id/til_hours"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
@@ -42,17 +45,20 @@
             android:id="@+id/et_sim_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/text_primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_hours"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginStart="8dp"
         android:hint="Hours/Day"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/primary"
+        app:hintTextColor="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/til_power"
         app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
@@ -61,7 +67,8 @@
             android:id="@+id/et_sim_hours"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="@color/text_primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -69,17 +76,18 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
-        android:text="Calculate Cost"
+        android:text="Run Simulation"
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/on_primary"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/til_hours" />
     
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_results"
+        style="@style/Widget.Kadali.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="?attr/colorSurface"
         app:layout_constraintTop_toBottomOf="@id/btn_calculate_sim">
         
         <LinearLayout
@@ -91,36 +99,40 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Simulation Results"
+                android:text="Calculation Engine Result"
                 android:textAllCaps="true"
                 android:letterSpacing="0.1"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
                 android:textStyle="bold"/>
             
             <TextView
                 android:id="@+id/tv_sim_daily"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daily: -"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textStyle="bold"
+                android:text="Daily Impact: Rp 0"
+                android:textColor="@color/primary"
+                android:textAppearance="@style/TextAppearance.Kadali.Headline"
+                android:textSize="20sp"
                 android:layout_marginTop="16dp"/>
                 
             <TextView
                 android:id="@+id/tv_sim_monthly"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Monthly: -"
-                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:text="Monthly Impact: Rp 0"
+                android:textColor="@color/text_primary"
+                android:textAppearance="@style/TextAppearance.Kadali.Body"
+                android:textStyle="bold"
                 android:layout_marginTop="8dp"/>
                 
             <TextView
                 android:id="@+id/tv_sim_yearly"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Yearly: -"
-                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:text="Yearly Impact: Rp 0"
+                android:textColor="@color/text_secondary"
+                android:textAppearance="@style/TextAppearance.Kadali.Body"
                 android:layout_marginTop="4dp"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

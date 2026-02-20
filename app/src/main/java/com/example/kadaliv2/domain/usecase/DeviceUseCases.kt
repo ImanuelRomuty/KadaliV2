@@ -5,11 +5,11 @@ import com.example.kadaliv2.domain.repository.DeviceRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetRoomDevicesUseCase(private val repository: DeviceRepository) {
-    operator fun invoke(roomId: Long): Flow<List<Device>> = repository.getDevicesByRoomId(roomId)
+    operator fun invoke(roomId: String): Flow<List<Device>> = repository.getDevicesByRoomId(roomId)
 }
 
 class SaveDeviceUseCase(private val repository: DeviceRepository) {
-    suspend operator fun invoke(device: Device): Long = repository.insertDevice(device)
+    suspend operator fun invoke(device: Device) = repository.insertDevice(device)
 }
 
 class DeleteDeviceUseCase(private val repository: DeviceRepository) {
@@ -21,7 +21,7 @@ class UpdateDeviceUseCase(private val repository: DeviceRepository) {
 }
 
 class GetDeviceByIdUseCase(private val repository: DeviceRepository) {
-    suspend operator fun invoke(id: Long): Device? = repository.getDeviceById(id)
+    suspend operator fun invoke(id: String): Device? = repository.getDeviceById(id)
 }
 
 class GetAllDevicesUseCase(private val repository: DeviceRepository) {

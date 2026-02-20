@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="20dp"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/tv_detail_room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Room Details"
-        android:textAppearance="?attr/textAppearanceHeadline5"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Kadali.Headline"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,8 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Total: Rp 0 / month"
-        android:textColor="?attr/colorPrimary"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textColor="@color/primary"
+        android:textAppearance="@style/TextAppearance.Kadali.Body"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_detail_room_name" />
@@ -33,10 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Equipment List"
+        android:text="Equipment Inventory"
         android:textAllCaps="true"
         android:letterSpacing="0.1"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="@color/text_secondary"
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="No devices in this room"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="@color/text_secondary"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tv_devices_section_title"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,16 +68,13 @@
         app:layout_constraintTop_toBottomOf="@id/tv_devices_section_title"
         tools:listitem="@layout/item_device" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_device"
+        style="@style/Widget.Kadali.FAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:text="Add Device"
-        android:textColor="?attr/colorOnPrimary"
-        app:icon="@android:drawable/ic_input_add"
-        app:iconTint="?attr/colorOnPrimary"
-        app:backgroundTint="?attr/colorPrimary"
+        app:srcCompat="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

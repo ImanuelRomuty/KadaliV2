@@ -1,7 +1,6 @@
 package com.example.kadaliv2.di
 
-import androidx.room.Room
-import com.example.kadaliv2.data.local.AppDatabase
+import com.example.kadaliv2.data.remote.FirestoreService
 import com.example.kadaliv2.data.repository.DeviceRepositoryImpl
 import com.example.kadaliv2.data.repository.RoomRepositoryImpl
 import com.example.kadaliv2.data.repository.TariffRepositoryImpl
@@ -12,18 +11,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            AppDatabase::class.java,
-            "kadali_v2_db"
-        ).build()
-    }
+    // Firestore remote layer
+    single { FirestoreService() }
 
-    single { get<AppDatabase>().roomDao() }
-    single { get<AppDatabase>().deviceDao() }
-    single { get<AppDatabase>().tariffDao() }
-
+    // Repositories (Cloud-First)
     single<RoomRepository> { RoomRepositoryImpl(get()) }
     single<DeviceRepository> { DeviceRepositoryImpl(get()) }
     single<TariffRepository> { TariffRepositoryImpl(get()) }

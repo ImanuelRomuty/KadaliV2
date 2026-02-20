@@ -16,7 +16,7 @@ class SimulationViewModel(
 
     fun calculate(power: Double, hours: Double, pricePerKwh: Double) {
         // Create a dummy device for calculation
-        val device = Device(roomId = 0, name = "Sim", powerWatt = power, usageHoursPerDay = hours, quantity = 1)
+        val device = Device(roomId = "", name = "Sim", powerWatt = power, usageHoursPerDay = hours, quantity = 1)
         
         val dailyEnergy = calculateEnergyUseCase.calculateDailyEnergy(device)
         val dailyCost = calculateEnergyUseCase.calculateDailyCost(dailyEnergy, pricePerKwh)

@@ -27,7 +27,7 @@ class DeviceViewModel(
     private val calculateEnergyUseCase: CalculateEnergyUseCase
 ) : ViewModel() {
 
-    private val _roomId = MutableStateFlow<Long>(-1)
+    private val _roomId = MutableStateFlow<String>("")
     
     val roomDevices = _roomId.flatMapLatest { id ->
         getRoomDevicesUseCase(id)
@@ -50,17 +50,17 @@ class DeviceViewModel(
     private val _device = MutableStateFlow<Device?>(null)
     val device = _device.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
-    fun getDevice(id: Long) {
+    fun getDevice(id: String) {
         viewModelScope.launch {
             _device.value = getDeviceByIdUseCase(id)
         }
     }
 
-    fun setRoomId(id: Long) {
+    fun setRoomId(id: String) {
         _roomId.value = id
     }
 
-    fun saveDevice(roomId: Long, name: String, power: Double, hours: Double, quantity: Int) {
+    fun saveDevice(roomId: String, name: String, power: Double, hours: Double, quantity: Int) {
         viewModelScope.launch {
             val device = Device(
                 roomId = roomId,
@@ -73,7 +73,7 @@ class DeviceViewModel(
         }
     }
 
-    fun updateDevice(id: Long, roomId: Long, name: String, power: Double, hours: Double, quantity: Int) {
+    fun updateDevice(id: String, roomId: String, name: String, power: Double, hours: Double, quantity: Int) {
         viewModelScope.launch {
             val device = Device(
                 id = id,
