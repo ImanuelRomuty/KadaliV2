@@ -25,10 +25,10 @@ class AddRoomFragment : Fragment(R.layout.fragment_add_room) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddRoomBinding.bind(view)
 
-        val isEditMode = args.roomId != -1L
+        val isEditMode = args.roomId != null
 
         if (isEditMode) {
-            setupEditMode(args.roomId)
+            setupEditMode(args.roomId!!)
         }
 
         binding.btnSaveRoom.setOnClickListener {
@@ -41,7 +41,7 @@ class AddRoomFragment : Fragment(R.layout.fragment_add_room) {
             }
 
             if (isEditMode) {
-                viewModel.updateRoom(args.roomId, name, desc)
+                viewModel.updateRoom(args.roomId!!, name, desc)
                 Toast.makeText(requireContext(), "Room updated", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.saveRoom(name, desc)
@@ -51,7 +51,7 @@ class AddRoomFragment : Fragment(R.layout.fragment_add_room) {
         }
     }
 
-    private fun setupEditMode(roomId: Long) {
+    private fun setupEditMode(roomId: String) {
         binding.btnSaveRoom.text = "Update Room"
         // Need to set title? Toolbar might be handled by MainActivity destination label, 
         // but we can override it or leave it as "Add Room" (inaccurate) -> Updated graph label? 

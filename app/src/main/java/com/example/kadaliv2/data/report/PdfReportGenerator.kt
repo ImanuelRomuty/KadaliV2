@@ -24,6 +24,7 @@ class PdfReportGenerator(private val context: Context) {
         val canvas = page.canvas
         val paint = Paint()
 
+
         // Styles
         val titlePaint = Paint().apply {
             color = Color.BLACK
@@ -60,7 +61,7 @@ class PdfReportGenerator(private val context: Context) {
         yPos += 30f
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val dateStr = dateFormat.format(Date(reportData.generatedDate))
-        canvas.drawText("Date Generated: $dateStr", pageInfo.pageWidth / 2f, yPos, Paint().apply { 
+        canvas.drawText("Date Generated: $dateStr", pageInfo.pageWidth / 2f, yPos, Paint().apply {
             color = Color.GRAY
             textSize = 12f
             textAlign = Paint.Align.CENTER

@@ -27,10 +27,10 @@ class AddDeviceFragment : Fragment(R.layout.fragment_add_device) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddDeviceBinding.bind(view)
 
-        val isEditMode = args.deviceId != -1L
+        val isEditMode = args.deviceId != null
 
         if (isEditMode) {
-            setupEditMode(args.deviceId)
+            setupEditMode(args.deviceId!!)
         }
 
         binding.btnSaveDevice.setOnClickListener {
@@ -49,7 +49,7 @@ class AddDeviceFragment : Fragment(R.layout.fragment_add_device) {
             val hours = hoursStr.toDoubleOrNull() ?: 0.0
 
             if (isEditMode) {
-                viewModel.updateDevice(args.deviceId, args.roomId, name, power, hours, qty)
+                viewModel.updateDevice(args.deviceId!!, args.roomId, name, power, hours, qty)
                 Toast.makeText(requireContext(), "Device updated", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.saveDevice(args.roomId, name, power, hours, qty)
@@ -59,7 +59,7 @@ class AddDeviceFragment : Fragment(R.layout.fragment_add_device) {
         }
     }
 
-    private fun setupEditMode(deviceId: Long) {
+    private fun setupEditMode(deviceId: String) {
         binding.btnSaveDevice.text = "Update Device"
         (requireActivity() as? androidx.appcompat.app.AppCompatActivity)?.supportActionBar?.title = "Edit Device"
 

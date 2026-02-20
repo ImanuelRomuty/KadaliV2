@@ -9,7 +9,7 @@ class GetRoomsUseCase(private val repository: RoomRepository) {
 }
 
 class SaveRoomUseCase(private val repository: RoomRepository) {
-    suspend operator fun invoke(room: Room): Long = repository.insertRoom(room)
+    suspend operator fun invoke(room: Room) = repository.insertRoom(room)
 }
 
 class DeleteRoomUseCase(private val repository: RoomRepository) {
@@ -21,5 +21,5 @@ class UpdateRoomUseCase(private val repository: RoomRepository) {
 }
 
 class GetRoomByIdUseCase(private val repository: RoomRepository) {
-    suspend operator fun invoke(id: Long): Room? = repository.getRoomById(id)
+    suspend operator fun invoke(id: String): Room? = repository.getRoomById(id)
 }

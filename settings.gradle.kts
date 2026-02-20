@@ -1,5 +1,26 @@
 pluginManagement {
     repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
+rootProject.name = "KadaliV2"
+include(":app")
+
+/*
+
+pluginManagement {
+    repositories {
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -22,3 +43,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "KadaliV2"
 include(":app")
+*/
+

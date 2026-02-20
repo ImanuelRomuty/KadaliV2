@@ -21,7 +21,7 @@ class RoomViewModel(
     private val _room = MutableStateFlow<Room?>(null)
     val room = _room.asStateFlow()
 
-    fun getRoom(id: Long) {
+    fun getRoom(id: String) {
         viewModelScope.launch {
             _room.value = getRoomByIdUseCase(id)
         }
@@ -34,7 +34,7 @@ class RoomViewModel(
         }
     }
     
-    fun updateRoom(id: Long, name: String, description: String?) {
+    fun updateRoom(id: String, name: String, description: String?) {
         viewModelScope.launch {
             val room = Room(id = id, name = name, description = description)
             updateRoomUseCase(room)

@@ -1,33 +1,57 @@
 package com.example.kadaliv2.data.repository
 
-import com.example.kadaliv2.data.local.dao.RoomDao
-import com.example.kadaliv2.data.local.entity.toDomain
-import com.example.kadaliv2.data.local.entity.toEntity
+import com.example.kadaliv2.data.remote.FirestoreService
 import com.example.kadaliv2.domain.model.Room
 import com.example.kadaliv2.domain.repository.RoomRepository
+import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class RoomRepositoryImpl(private val roomDao: RoomDao) : RoomRepository {
+class RoomRepositoryImpl(
+    private val firestoreService: FirestoreService
+) : RoomRepository {
+
+    private val collection = "rooms"
+
     override fun getAllRooms(): Flow<List<Room>> {
-        return roomDao.getAllRooms().map { entities ->
-            entities.map { it.toDomain() }
+        return firestoreService.getDocumentsFlow(collection).map { docs ->
+            docs.map { (id, data) ->
+                Room(
+                    id = id,
+                    name = data["name"] as? String ?: "",
+                    description = data["description"] as? String
+                )
+            }
         }
     }
 
-    override suspend fun getRoomById(id: Long): Room? {
-        return roomDao.getRoomById(id)?.toDomain()
+    override suspend fun getRoomById(id: String): Room? {
+        val data = firestoreService.getDocument(collection, id) ?: return null
+        return Room(
+            id = id,
+            name = data["name"] as? String ?: "",
+            description = data["description"] as? String
+        )
     }
 
-    override suspend fun insertRoom(room: Room): Long {
-        return roomDao.insertRoom(room.toEntity())
+    override suspend fun insertRoom(room: Room) {
+        val data = mapOf(
+            "name" to room.name,
+            "description" to room.description,
+            "createdAt" to FieldValue.serverTimestamp()
+        )
+        firestoreService.addDocument(collection, data)
     }
 
     override suspend fun updateRoom(room: Room) {
-        roomDao.updateRoom(room.toEntity())
+        val data = mapOf(
+            "name" to room.name,
+            "description" to room.description
+        )
+        firestoreService.updateDocument(collection, room.id, data)
     }
 
     override suspend fun deleteRoom(room: Room) {
-        roomDao.deleteRoom(room.toEntity())
+        firestoreService.deleteDocument(collection, room.id)
     }
 }
