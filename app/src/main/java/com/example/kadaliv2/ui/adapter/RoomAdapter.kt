@@ -7,10 +7,21 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kadaliv2.databinding.ItemRoomBinding
 import com.example.kadaliv2.domain.model.Room
+import java.text.NumberFormat
+import java.util.Locale
 
 class RoomAdapter(
     private val onItemClick: (Room) -> Unit
 ) : ListAdapter<Room, RoomAdapter.RoomViewHolder>(DiffCallback) {
+
+    /** Map of room name → daily cost in Rp. Updated separately from the list. */
+    private var roomDailyCost: Map<String, Double> = emptyMap()
+
+    /** Call this whenever dashboardState.roomDailyCost changes. */
+    fun submitCosts(costs: Map<String, Double>) {
+        roomDailyCost = costs
+        notifyItemRangeChanged(0, itemCount)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
         val binding = ItemRoomBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,7 +35,7 @@ class RoomAdapter(
     inner class RoomViewHolder(private val binding: ItemRoomBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
+                val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onItemClick(getItem(position))
                 }
@@ -33,12 +44,14 @@ class RoomAdapter(
 
         fun bind(room: Room) {
             binding.tvRoomName.text = room.name
-            // Note: Energy and Cost per room require calculating devices for that room.
-            // For simplicity in this adapter, we might just show basic info or 
-            // we need to pass a map of room stats. 
-            // For now, let's just show the name.
-            binding.tvRoomEnergy.text = room.description ?: ""
-            binding.tvRoomCost.text = "" // TODO: Bind cost if available
+            binding.tvDeviceCount.text = room.description ?: "No description"
+
+            val cost = roomDailyCost[room.name] ?: 0.0
+            val currencyFormat = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+            currencyFormat.maximumFractionDigits = 0
+            binding.tvRoomCost.text = currencyFormat.format(cost)
+
+            binding.ivRoomIcon.setImageResource(com.example.kadaliv2.R.drawable.ic_room_placeholder)
         }
     }
 

@@ -1,140 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="@color/background">
+    android:background="@color/navy_darker">
 
-    <TextView
-        android:id="@+id/tv_simulation_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Energy Simulation"
-        android:textAppearance="@style/TextAppearance.Kadali.Headline"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    
-    <TextView
-        android:id="@+id/tv_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Simulate temporary equipment impact"
-        android:textColor="@color/text_secondary"
-        android:textAppearance="@style/TextAppearance.Kadali.Body"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_simulation_title" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_power"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Power (Watt)"
-        app:boxStrokeColor="@color/primary"
-        app:hintTextColor="@color/primary"
-        app:layout_constraintEnd_toStartOf="@id/til_hours"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_sim_power"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textColor="@color/text_primary" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_hours"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="8dp"
-        android:hint="Hours/Day"
-        app:boxStrokeColor="@color/primary"
-        app:hintTextColor="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/til_power"
-        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_sim_hours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:textColor="@color/text_primary" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btn_calculate_sim"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:text="Run Simulation"
-        android:backgroundTint="@color/primary"
-        android:textColor="@color/on_primary"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/til_hours" />
-    
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_results"
-        style="@style/Widget.Kadali.Card"
+    <!-- Header Section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_calculate_sim">
-        
-        <LinearLayout
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_back"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconTint="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cost Impact Simulator"
+            android:textColor="@color/text_high"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_header">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
-            
-            <TextView
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="100dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/badge_tariff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calculation Engine Result"
-                android:textAllCaps="true"
-                android:letterSpacing="0.1"
-                android:textColor="@color/text_secondary"
-                android:textSize="11sp"
-                android:textStyle="bold"/>
-            
-            <TextView
-                android:id="@+id/tv_sim_daily"
+                android:layout_marginTop="24dp"
+                app:cardBackgroundColor="#1A94A3B8"
+                app:strokeColor="#4DFFC107"
+                app:strokeWidth="1dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="6dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:src="@drawable/ic_bolt"
+                        app:tint="@color/primary" />
+                    <TextView
+                        android:id="@+id/tv_active_tariff_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="ACTIVE TARIFF: RP 1,444.70/KWH"
+                        android:textColor="@color/primary"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.05" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Specification Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_spec"
+                style="@style/Widget.Kadali.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daily Impact: Rp 0"
-                android:textColor="@color/primary"
-                android:textAppearance="@style/TextAppearance.Kadali.Headline"
-                android:textSize="20sp"
-                android:layout_marginTop="16dp"/>
-                
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/badge_tariff">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DEVICE SPECIFICATION"
+                        android:textColor="@color/text_low"
+                        android:textSize="10sp"
+                        android:fontFamily="sans-serif-black"
+                        android:letterSpacing="0.2"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wattage (W)"
+                        android:textColor="@color/text_high"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_power"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp"
+                        app:hintEnabled="false">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_sim_power"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_input_navy"
+                            android:inputType="number"
+                            android:paddingHorizontal="16dp"
+                            android:text="60"
+                            android:textColor="@color/text_high"
+                            android:textSize="18sp"
+                            android:fontFamily="sans-serif-bold" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Usage per Day"
+                        android:textColor="@color/text_high"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/slider_hours"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:value="8"
+                            android:valueFrom="1"
+                            android:valueTo="24"
+                            android:stepSize="1"
+                            app:thumbRadius="10dp"
+                            app:trackHeight="6dp"
+                            app:trackColorInactive="@color/navy_darker"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1H"
+                            android:textColor="@color/text_medium"
+                            android:textSize="10sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/slider_hours" />
+
+                        <TextView
+                            android:id="@+id/tv_current_hours"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="8 Hours"
+                            android:textColor="@color/primary"
+                            android:textSize="16sp"
+                            android:fontFamily="sans-serif-black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/slider_hours" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="24H"
+                            android:textColor="@color/text_medium"
+                            android:textSize="10sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/slider_hours" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_calculate_sim"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="24dp"
+                android:text="Run Simulation"
+                android:textColor="@color/navy_darker"
+                android:fontFamily="sans-serif-black"
+                app:cornerRadius="20dp"
+                app:backgroundTint="@color/primary"
+                app:icon="@drawable/ic_calculate"
+                app:iconGravity="textStart"
+                app:layout_constraintTop_toBottomOf="@id/card_spec" />
+
+            <!-- Results Section -->
             <TextView
-                android:id="@+id/tv_sim_monthly"
+                android:id="@+id/label_results"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="ESTIMATED IMPACT"
+                android:textColor="@color/text_low"
+                android:textSize="10sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_calculate_sim" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_results"
+                style="@style/Widget.Kadali.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Monthly Impact: Rp 0"
-                android:textColor="@color/text_primary"
-                android:textAppearance="@style/TextAppearance.Kadali.Body"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"/>
-                
-            <TextView
-                android:id="@+id/tv_sim_yearly"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Yearly Impact: Rp 0"
-                android:textColor="@color/text_secondary"
-                android:textAppearance="@style/TextAppearance.Kadali.Body"
-                android:layout_marginTop="4dp"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/label_results">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#0DFFC107" />
+                    
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-80dp"
+                        android:padding="20dp">
+                        
+                        <TextView
+                            android:id="@+id/label_monthly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Monthly Cost Projection"
+                            android:textColor="@color/text_medium"
+                            android:textSize="10sp"
+                            android:fontFamily="sans-serif-black"
+                            android:textAllCaps="true"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_sim_monthly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Rp 31.200"
+                            android:textColor="@color/primary"
+                            android:textSize="32sp"
+                            android:fontFamily="sans-serif-black"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/label_monthly" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="/ month"
+                            android:textColor="@color/text_low"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_sim_monthly"
+                            app:layout_constraintStart_toEndOf="@id/tv_sim_monthly" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/border_navy" />
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="20dp"
+                            android:divider="@color/border_navy"
+                            android:showDividers="middle">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daily Cost"
+                                android:textColor="@color/text_low"
+                                android:textSize="10sp"
+                                android:fontFamily="sans-serif-black"
+                                android:textAllCaps="true" />
+                            <TextView
+                                android:id="@+id/tv_sim_daily"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Rp 1.040"
+                                android:textColor="@color/primary"
+                                android:textSize="18sp"
+                                android:fontFamily="sans-serif-bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Yearly Total"
+                                android:textColor="@color/text_low"
+                                android:textSize="10sp"
+                                android:fontFamily="sans-serif-black"
+                                android:textAllCaps="true" />
+                            <TextView
+                                android:id="@+id/tv_sim_yearly"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Rp 379.600"
+                                android:textColor="@color/text_high"
+                                android:textSize="18sp"
+                                android:fontFamily="sans-serif-bold" />
+                        </LinearLayout>
+                    </GridLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/border_navy" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="#1AFFFFFF">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/ic_saving"
+                                app:tint="@color/primary" />
+                            <TextView
+                                android:id="@+id/tv_energy_impact"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="ENERGY: 0.48 KWH/DAY"
+                                android:textColor="@color/text_medium"
+                                android:textSize="11sp"
+                                android:fontFamily="sans-serif-black" />
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/badge_impact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_low"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="LOW IMPACT"
+                            android:textColor="#FF4CAF50"
+                            android:textSize="9sp"
+                            android:fontFamily="sans-serif-black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

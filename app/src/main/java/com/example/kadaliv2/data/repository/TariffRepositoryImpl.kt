@@ -7,6 +7,9 @@ import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/** Default PLN residential tariff (Rp/kWh), used when no tariff has been stored yet. */
+private const val DEFAULT_TARIFF_PER_KWH = 1444.70
+
 class TariffRepositoryImpl(
     private val firestoreService: FirestoreService
 ) : TariffRepository {
@@ -16,9 +19,11 @@ class TariffRepositoryImpl(
 
     override fun getTariff(): Flow<Tariff?> {
         return firestoreService.getDocumentFlow(collection, document).map { data ->
-            if (data == null) return@map null
+            // If the document doesn't exist yet, fall back to the default PLN rate
+            // so the dashboard always shows a meaningful cost estimate.
             Tariff(
-                pricePerKwh = (data["tariffPerKwh"] as? Number)?.toDouble() ?: 0.0
+                pricePerKwh = (data?.get("tariffPerKwh") as? Number)?.toDouble()
+                    ?: DEFAULT_TARIFF_PER_KWH
             )
         }
     }

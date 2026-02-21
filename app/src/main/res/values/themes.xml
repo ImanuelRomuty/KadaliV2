@@ -4,12 +4,12 @@
         <!-- Brand Colors -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
-        <item name="android:colorBackground">@color/background</item>
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorSurfaceVariant">@color/surface_variant</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
-        <item name="colorOutline">@color/outline</item>
+        <item name="android:colorBackground">@color/navy_darker</item>
+        <item name="colorSurface">@color/navy_dark</item>
+        <item name="colorSurfaceVariant">@color/navy_light</item>
+        <item name="colorOnSurface">@color/text_high</item>
+        <item name="colorOnSurfaceVariant">@color/text_medium</item>
+        <item name="colorOutline">@color/border_navy</item>
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/on_error</item>
 
@@ -25,56 +25,58 @@
         <item name="materialCardViewStyle">@style/Widget.Kadali.Card</item>
 
         <!-- System UI -->
-        <item name="android:statusBarColor">@color/surface</item>
+        <item name="android:statusBarColor">@color/navy_darker</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/navy_darker</item>
     </style>
 
     <!-- Typography Styles -->
     <style name="TextAppearance.Kadali.Headline" parent="TextAppearance.Material3.HeadlineLarge">
-        <item name="android:fontFamily">@font/montserrat_bold</item>
+        <item name="android:fontFamily">sans-serif-black</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">@color/text_high</item>
     </style>
 
     <style name="TextAppearance.Kadali.Body" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColor">@color/text_medium</item>
     </style>
 
     <!-- Component Widgets -->
     <style name="Widget.Kadali.Card" parent="Widget.Material3.CardView.Filled">
-        <item name="cardBackgroundColor">@color/surface_variant</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="strokeColor">@color/outline</item>
+        <item name="cardBackgroundColor">@color/navy_dark</item>
+        <item name="cardCornerRadius">24dp</item>
+        <item name="strokeColor">@color/border_navy</item>
         <item name="strokeWidth">1dp</item>
-        <item name="cardElevation">2dp</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
     <style name="Widget.Kadali.FAB" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/primary</item>
         <item name="tint">@color/on_primary</item>
         <item name="shapeAppearance">@style/ShapeAppearance.Kadali.FAB</item>
-        <item name="elevation">6dp</item>
+        <item name="elevation">8dp</item>
     </style>
 
     <style name="ShapeAppearance.Kadali.FAB" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">12dp</item>
+        <item name="cornerSize">20dp</item>
     </style>
 
     <style name="Widget.Kadali.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
-        <item name="backgroundTint">@color/surface</item>
+        <item name="backgroundTint">@color/navy_darker</item>
         <item name="itemIconTint">@color/nav_item_tint</item>
         <item name="itemTextColor">@color/nav_item_tint</item>
         <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="itemActiveIndicatorStyle">@null</item>
     </style>
 
     <!-- App Main Theme -->
     <style name="Theme.KadaliV2" parent="Theme.KadaliDarkElectric" />
     
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/surface</item>
+        <item name="windowSplashScreenBackground">@color/navy_darker</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.KadaliV2</item>
     </style>

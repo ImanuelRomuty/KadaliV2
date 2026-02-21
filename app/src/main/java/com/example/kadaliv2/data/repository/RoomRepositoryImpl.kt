@@ -3,6 +3,7 @@ package com.example.kadaliv2.data.repository
 import com.example.kadaliv2.data.remote.FirestoreService
 import com.example.kadaliv2.domain.model.Room
 import com.example.kadaliv2.domain.repository.RoomRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +20,8 @@ class RoomRepositoryImpl(
                 Room(
                     id = id,
                     name = data["name"] as? String ?: "",
-                    description = data["description"] as? String
+                    description = data["description"] as? String,
+                    createdAt = (data["createdAt"] as? Timestamp)?.toDate()?.time ?: 0L
                 )
             }
         }
@@ -30,7 +32,8 @@ class RoomRepositoryImpl(
         return Room(
             id = id,
             name = data["name"] as? String ?: "",
-            description = data["description"] as? String
+            description = data["description"] as? String,
+            createdAt = (data["createdAt"] as? Timestamp)?.toDate()?.time ?: 0L
         )
     }
 

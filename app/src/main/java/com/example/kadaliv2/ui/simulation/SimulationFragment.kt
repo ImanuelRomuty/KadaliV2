@@ -24,30 +24,16 @@ class SimulationFragment : Fragment(R.layout.fragment_simulation) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSimulationBinding.bind(view)
 
+        binding.sliderHours.addOnChangeListener { _, value, _ ->
+            binding.tvCurrentHours.text = "${value.toInt()} Hours"
+        }
+
         binding.btnCalculateSim.setOnClickListener {
             val power = binding.etSimPower.text.toString().toDoubleOrNull() ?: 0.0
-            val hours = binding.etSimHours.text.toString().toDoubleOrNull() ?: 0.0
+            val hours = binding.sliderHours.value.toDouble()
             
-            // For simulation, we ideally need the tariff.
-            // But SimulationViewModel doesn't have it injected in my simplified version.
-            // Let's assume a default or pass it?
-            // "4.3 Settings ... Electricity tariff (manual input...)"
-            // The simulation usually uses the global tariff.
-            // I should have injected GetTariffUseCase into SimulationViewModel too.
-            // For now, I'll assume Hardcoded or add input for Tariff in Simulation if desired?
-            // "4.2 Simulation Calculator ... Allows users to simulate device usage without saving it"
-            
-            // I'll update SimulationViewModel to fetch Tariff.
-            // For now, let's just pass 1500.0 or add a field if needed.
-            // Or better, I'll update the VM to get Tariff.
-            // Wait, I can't easily update VM right now without breaking flow. 
-            // I'll assume standard price 1444.0 (from example) if not provided.
-            // Or I can add an input field for price in Simulation.
-            // The prompt says "Users manually input electricity tariff".
-            
-            // I'll just use 1444.0 for now for demo, or update VM in next step.
-            // Let's use 1444.0
-            viewModel.calculate(power, hours, 1444.0)
+            // Assuming 1444.70 as default tariff for simulation if not injected
+            viewModel.calculate(power, hours, 1444.70)
         }
         
         setupObserver()
@@ -59,9 +45,23 @@ class SimulationFragment : Fragment(R.layout.fragment_simulation) {
                 viewModel.simulationResult.collect { result ->
                     if (result != null) {
                         val currencyFormat = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-                        binding.tvSimDaily.text = "Daily: ${currencyFormat.format(result.daily)}"
-                        binding.tvSimMonthly.text = "Monthly: ${currencyFormat.format(result.monthly)}"
-                        binding.tvSimYearly.text = "Yearly: ${currencyFormat.format(result.yearly)}"
+                        binding.tvSimDaily.text = currencyFormat.format(result.daily)
+                        binding.tvSimMonthly.text = currencyFormat.format(result.monthly)
+                        binding.tvSimYearly.text = currencyFormat.format(result.yearly)
+                        
+                        val power = binding.etSimPower.text.toString().toDoubleOrNull() ?: 0.0
+                        val dailyKwh = (power * binding.sliderHours.value) / 1000.0
+                        binding.tvEnergyImpact.text = String.format("ENERGY: %.2f KWH/DAY", dailyKwh)
+                        
+                        if (result.monthly > 100000) {
+                            binding.badgeImpact.text = "HIGH IMPACT"
+                            binding.badgeImpact.setBackgroundResource(R.drawable.bg_badge_primary)
+                            binding.badgeImpact.setTextColor(resources.getColor(R.color.navy_darker, null))
+                        } else {
+                            binding.badgeImpact.text = "LOW IMPACT"
+                            binding.badgeImpact.setBackgroundResource(R.drawable.bg_badge_low)
+                            binding.badgeImpact.setTextColor(android.graphics.Color.parseColor("#FF4CAF50"))
+                        }
                     }
                 }
             }

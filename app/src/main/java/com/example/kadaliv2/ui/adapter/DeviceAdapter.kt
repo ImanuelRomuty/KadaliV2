@@ -27,17 +27,17 @@ class DeviceAdapter(
     inner class DeviceViewHolder(private val binding: ItemDeviceBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(device: Device) {
             binding.tvDeviceName.text = device.name
-            binding.tvDeviceQuantity.text = "x${device.quantity}"
-            binding.tvDeviceSpecs.text = "${device.powerWatt}W | ${device.usageHoursPerDay} hrs/day"
+            binding.tvDeviceWattage.text = "${device.powerWatt.toInt()}W"
+            binding.tvDeviceHours.text = "${device.usageHoursPerDay} hrs/day"
             
-            // Calculate daily cost approx if needed or just show consumption
-            val dailyKwh = (device.powerWatt * device.usageHoursPerDay * device.quantity) / 1000.0
-            binding.tvDeviceCost.text = String.format("%.2f kWh/day", dailyKwh)
+            // Show load badge if wattage is high (e.g., > 1000W)
+            binding.tvLoadBadge.visibility = if (device.powerWatt >= 1000) android.view.View.VISIBLE else android.view.View.GONE
             
-            binding.btnEditDevice.setOnClickListener {
+            binding.ivDeviceIcon.setImageResource(com.example.kadaliv2.R.drawable.ic_device_placeholder)
+            
+            binding.root.setOnClickListener {
                 onEditClick(device)
             }
-            
             binding.btnDeleteDevice.setOnClickListener {
                 onDeleteClick(device)
             }

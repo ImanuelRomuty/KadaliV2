@@ -32,21 +32,33 @@ class DashboardViewModel(
 
     val dashboardState = combine(rooms, devices, tariff) { roomList, deviceList, tariffValue ->
         val totalEnergy = deviceList.sumOf { calculateEnergyUseCase.calculateDailyEnergy(it) }
-        val dailyCost = if (tariffValue != null) {
-            calculateEnergyUseCase.calculateDailyCost(totalEnergy, tariffValue.pricePerKwh)
-        } else {
-            0.0
-        }
+        // tariff is guaranteed non-null (falls back to PLN default in TariffRepositoryImpl)
+        val dailyCost = calculateEnergyUseCase.calculateDailyCost(
+            totalEnergy,
+            tariffValue?.pricePerKwh ?: 1444.70
+        )
         val weeklyCost = calculateEnergyUseCase.calculateWeeklyCost(dailyCost)
         val monthlyCost = calculateEnergyUseCase.calculateMonthlyCost(dailyCost)
         val yearlyCost = calculateEnergyUseCase.calculateYearlyCost(dailyCost)
         
-        // Group devices by room and calculate per-room energy
+        // Group devices by room and calculate per-room energy and daily cost
         val roomConsumption = roomList.associate { room ->
             val roomDevices = deviceList.filter { it.roomId == room.id }
             val roomEnergy = roomDevices.sumOf { calculateEnergyUseCase.calculateDailyEnergy(it) }
             room.name to roomEnergy
         }
+        val tariffRate = tariffValue?.pricePerKwh ?: 1444.70
+        val roomDailyCost = roomConsumption.mapValues { (_, energy) ->
+            calculateEnergyUseCase.calculateDailyCost(energy, tariffRate)
+        }
+        
+        // Chart data: total energy per device type (summed across all rooms)
+        val deviceTypeTotals = deviceList
+            .groupBy { it.name.trim() }
+            .map { (typeName, devices) ->
+                typeName to devices.sumOf { calculateEnergyUseCase.calculateDailyEnergy(it) }
+            }
+            .sortedByDescending { it.second }
         
         DashboardState(
             totalEnergy = totalEnergy,
@@ -56,6 +68,8 @@ class DashboardViewModel(
             yearlyCost = yearlyCost,
             deviceCount = deviceList.size,
             roomConsumption = roomConsumption,
+            roomDailyCost = roomDailyCost,
+            deviceTypeTotals = deviceTypeTotals,
             isRoomListEmpty = roomList.isEmpty()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DashboardState())
@@ -68,6 +82,8 @@ class DashboardViewModel(
         val yearlyCost: Double = 0.0,
         val deviceCount: Int = 0,
         val roomConsumption: Map<String, Double> = emptyMap(),
+        val roomDailyCost: Map<String, Double> = emptyMap(),
+        val deviceTypeTotals: List<Pair<String, Double>> = emptyList(),
         val isRoomListEmpty: Boolean = true
     )
 

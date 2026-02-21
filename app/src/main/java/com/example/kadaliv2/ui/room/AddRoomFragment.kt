@@ -31,6 +31,10 @@ class AddRoomFragment : Fragment(R.layout.fragment_add_room) {
             setupEditMode(args.roomId!!)
         }
 
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.btnSaveRoom.setOnClickListener {
             val name = binding.etRoomName.text.toString()
             val desc = binding.etRoomDescription.text.toString()

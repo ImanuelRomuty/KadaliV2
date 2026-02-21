@@ -33,6 +33,10 @@ class AddDeviceFragment : Fragment(R.layout.fragment_add_device) {
             setupEditMode(args.deviceId!!)
         }
 
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.btnSaveDevice.setOnClickListener {
             val name = binding.etDeviceName.text.toString()
             val powerStr = binding.etPower.text.toString()
