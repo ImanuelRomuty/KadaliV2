@@ -181,24 +181,29 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             val barData = com.github.mikephil.charting.data.BarData(dataSet)
             barData.barWidth = 0.55f
 
+            val markerView = CustomMarkerView(requireContext(), R.layout.custom_marker_view, labels)
+            markerView.chartView = binding.barChart
+
             binding.barChart.apply {
                 data = barData
+                marker = markerView
 
                 xAxis.apply {
                     valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
                         override fun getFormattedValue(value: Float): String {
                             val idx = value.toInt()
                             val label = labels.getOrNull(idx) ?: ""
-                            return if (label.length > 9) label.take(8) + "…" else label
+                            return if (label.length > 15) label.take(14) + "…" else label
                         }
                     }
                     position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
                     setCenterAxisLabels(false)
+                    labelRotationAngle = -25f // Added label rotation for better long text visibility
                     axisMinimum = -0.5f
                     axisMaximum = totals.size - 0.5f
                     granularity = 1f
                     textColor = colorTextMed
-                    textSize = 11f
+                    textSize = 10f
                     setDrawGridLines(false)
                     setDrawAxisLine(true)
                     axisLineColor = colorBorder

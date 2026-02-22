@@ -429,19 +429,34 @@ class PdfReportGenerator(private val context: Context) {
         headers.forEachIndexed { i, h -> c.drawText(h, cx, yPos, tableHeaderTextPaint); cx += cols[i] }
         yPos += 13f
 
-        room.devices.forEachIndexed { index, device ->
+        if (room.devices.isEmpty()) {
             checkPageOverflow(13f)
-            if (index % 2 == 0) c.drawRect(RectF(xMargin - 5f, yPos - 10f, pageWidth - xMargin + 5f, yPos + 3f), rowAltPaint)
-            val p = bodyPaint.apply { textSize = 8f }
-            cx = xMargin
-            c.drawText("${index + 1}",                           cx, yPos, p); cx += cols[0]
-            c.drawText(device.deviceName.take(22),               cx, yPos, p); cx += cols[1]
-            c.drawText("${String.format("%.0f", device.power)}", cx, yPos, p); cx += cols[2]
-            c.drawText("${device.quantity}",                     cx, yPos, p); cx += cols[3]
-            c.drawText("${String.format("%.1f", device.hours)}", cx, yPos, p); cx += cols[4]
-            c.drawText("${String.format("%.3f", device.dailyEnergy)}", cx, yPos, p); cx += cols[5]
-            c.drawText(formatRp(device.dailyCost),               cx, yPos, p)
+            val p = bodyPaint.apply { 
+                textSize = 8f; 
+                color = colorSecondary 
+                typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.ITALIC) 
+            }
+            c.drawText("- No devices configured in this room -", xMargin + cols[0], yPos, p)
             yPos += 12f
+            bodyPaint.apply { 
+                color = Color.BLACK 
+                typeface = android.graphics.Typeface.DEFAULT 
+            }
+        } else {
+            room.devices.forEachIndexed { index, device ->
+                checkPageOverflow(13f)
+                if (index % 2 == 0) c.drawRect(RectF(xMargin - 5f, yPos - 10f, pageWidth - xMargin + 5f, yPos + 3f), rowAltPaint)
+                val p = bodyPaint.apply { textSize = 8f }
+                cx = xMargin
+                c.drawText("${index + 1}",                           cx, yPos, p); cx += cols[0]
+                c.drawText(device.deviceName.take(22),               cx, yPos, p); cx += cols[1]
+                c.drawText("${String.format("%.0f", device.power)}", cx, yPos, p); cx += cols[2]
+                c.drawText("${device.quantity}",                     cx, yPos, p); cx += cols[3]
+                c.drawText("${String.format("%.1f", device.hours)}", cx, yPos, p); cx += cols[4]
+                c.drawText("${String.format("%.3f", device.dailyEnergy)}", cx, yPos, p); cx += cols[5]
+                c.drawText(formatRp(device.dailyCost),               cx, yPos, p)
+                yPos += 12f
+            }
         }
         bodyPaint.textSize = 10f
     }
@@ -502,6 +517,25 @@ class PdfReportGenerator(private val context: Context) {
         val top = yPos - 4f
         val cardBg = Paint().apply { color = Color.parseColor("#F8FAFC"); style = Paint.Style.FILL }
         c.drawRoundRect(RectF(xMargin - 5f, top, pageWidth - xMargin + 5f, top + 88f), 4f, 4f, cardBg)
+
+        // Draw Classification Tag Badge
+        val (classLabel, classColor) = when {
+            device.power > 2000 -> "Critical" to Color.parseColor("#7C3AED")
+            device.power >= 800 -> "High" to Color.parseColor("#EF4444")
+            device.power >= 200 -> "Medium" to Color.parseColor("#F59E0B")
+            else -> "Low" to Color.parseColor("#22C55E")
+        }
+        val tagBg = Paint().apply { color = classColor; style = Paint.Style.FILL; isAntiAlias = true }
+        val tagTextP = Paint().apply { 
+            color = Color.WHITE; textSize = 7f; isAntiAlias = true
+            typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
+            textAlign = Paint.Align.RIGHT 
+        }
+        
+        val tagRight = pageWidth - xMargin
+        val tagLeft = tagRight - tagTextP.measureText(classLabel) - 12f
+        c.drawRoundRect(RectF(tagLeft, yPos - 9f, tagRight, yPos + 3f), 3f, 3f, tagBg)
+        c.drawText(classLabel, tagRight - 6f, yPos - 0.5f, tagTextP)
 
         drawTextLine("${device.deviceName}  ·  ${String.format("%.0f", device.power)} W  ×  qty ${device.quantity}  ×  ${String.format("%.1f", device.hours)} h/day", isBold = true)
         drawTextLine("Connected Load: ${String.format("%.0f", device.connectedLoad)} W")

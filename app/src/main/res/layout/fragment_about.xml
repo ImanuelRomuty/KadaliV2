@@ -61,14 +61,6 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:layout_marginBottom="32dp">
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_bolt"
-                    android:background="@drawable/ic_launcher_background"
-                    android:backgroundTint="@color/navy_light"
-                    android:padding="16dp"
-                    app:tint="@color/primary" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
