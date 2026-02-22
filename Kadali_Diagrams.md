@@ -38,7 +38,7 @@ graph TD
     D1 --> D2("Get Impact Badge & Costs")
 
     %% PDF Flow
-    C --> F(( "GENERATE PDF REPORT" ))
+    C --> F((GENERATE PDF REPORT))
     F --> F1["Auto Analytics Engine"]
     F1 --> F2["Save to Documents/KadaliReports"]
     class F,F1,F2 report;
@@ -50,28 +50,26 @@ graph TD
 
 ```mermaid
 erDiagram
-    %% Entities
     ROOM {
-        string id PK "Document ID"
-        string name "Nama Ruangan"
-        string description "Deskripsi (Opsional)"
-        long createdAt "Timestamp Pembuatan"
+        string id PK Document ID
+        string name Nama Ruangan
+        string description Deskripsi (Opsional)
+        long createdAt Timestamp Pembuatan
     }
     
     DEVICE {
-        string id PK "Document ID"
-        string roomId FK "ID Ruangan (Reference)"
-        string name "Nama Perangkat"
-        double powerWatt "Daya Listrik (Watt)"
-        double usageHoursPerDay "Lama Pemakaian (Jam/Hari)"
-        int quantity "Jumlah Perangkat"
+        string id PK Document ID
+        string roomId FK ID Ruangan (Reference)
+        string name Nama Perangkat
+        double powerWatt Daya Listrik (Watt)
+        double usageHoursPerDay Lama Pemakaian (Jam/Hari)
+        int quantity Jumlah Perangkat
     }
 
     TARIFF {
-        int id PK "Singleton ID (Selalu 1)"
-        double pricePerKwh "Harga per kWh (Rp)"
+        int id PK Singleton ID (Selalu 1)
+        double pricePerKwh Harga per kWh (Rp)
     }
 
-    %% Relationships
-    ROOM ||--o{ DEVICE : "memiliki (1:N)"
+    ROOM ||--o{ DEVICE : memiliki
 ```
